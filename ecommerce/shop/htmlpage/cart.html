@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+
+This is your cart page.
+Now you can place your orders
+THANKS FOR YOUR VIST
+
+{% endblock %}
+{% block title %}
+
+    CART
+
+{% endblock %}
+{% block content %}
+
+{%  if not cart_items %}
+<div>
+    <div class="text-center">
+        <br>
+        <h1 class="text-center my title">
+            ZANISM SHOPPING CART
+        </h1>
+        <br>
+        <p class="text-center">
+             <a href="{% url 'zanism:allproducts' %}">Go Home Page</a>
+        </p>
+
+    </div>
+</div>
+
+{% else %}
+<div>
+    <div class="text-center">
+        <br>
+        <h1 class="text-center my title">YOUR CART</h1>
+        <br>
+    </div>
+
+<div class="row mx-auto">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+    <table class="table my_custom_table">
+        <thead class="my_custom_thead">
+        <tr>
+            <th colspan="5">
+                Your Items
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cart_item in cart_items %}
+        <tr>
+            <td>
+<!--  "add it on href ,if click th cart image got o this page"              cart_item.products.get_absolute_url-->
+<!-- it can be set the href value is empty as it is same as href code             -->
+                <a href="{% url 'cart:cart_detail' %}"><img src="{{cart_item.products.image.url}}" alt=" " class="float-left rounded custom_image"></a>
+            </td>
+            <td class="text-left">
+                {{cart_item.products.name}}
+                <br>
+                SKU: {{cart_item.products.id}}
+                <br>
+                Price: ${{cart_item.products.price}}
+                <br>
+                Qty: {{cart_item.quantity}} x $ {{cart_item}}
+            </td>
+            <td>
+            $ {{cart_item.sub_total}}
+            </td>
+            {% if cart_item.quantity < cart_item.products.stock %}
+            <td>
+                <a href="{% url 'cart:add_cart' cart_item.products_id %}" class="custom_a"> <i class="fa fa-plus custom_icon"> </i></a>
+                &nbsp;<a href="{% url 'cart:cart_remove' cart_item.products.id %}" class="custom_a"><i class="fa fa-minus custom_icon"></i></a>
+                &nbsp;<a href="{% url 'cart:full_trush' cart_item.products.id %}" class="custom_icon"><i class="fa fa-trash custom_icon"></i></a>
+            </td>
+            {% else %}
+              <td>
+                &nbsp;<a href="{% url 'cart:cart_remove' cart_item.products.id %}" class="custom_a"><i class="fa fa-minus custom_icon"></i></a>
+                &nbsp;<a href="{% url 'cart:full_trush' cart_item.products.id %}" class="custom_icon"><i class="fa fa-trash custom_icon"></i></a>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <div class=" col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+        <table class="table my_custom_table">
+            <thead class="my_custom_thead">
+            <tr>
+                <th>
+                    CheckOut
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>
+                    please review your shopping experiance
+                </td>
+            </tr>
+            <tr>
+                <td class="text_left">
+                    your total : <strong>{{total}}</strong>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="mx-auto">
+            <a href="{% url 'zanism:allproducts' %}" class="btn btn-secondary btn-block my_custom_button">Continue Shopping</a>
+            <br>
+            <a href="{% url 'zanism:allproducts' %}" class="btn btn-success btn-block my_custom_button">Pyment</a>
+
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+</div>
+
+{% endblock %}

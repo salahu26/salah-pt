@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+<!--the truncatewords is used for the control the description -->
+{% else %}
+welcome to the ZANISM gens shop.This is our won product....
+{% endif %}
+{% endblock %}
+
+{% block title %}
+{% if category %}
+{{ category.name }} - zanism
+{% else %}
+welcome to the ZANISM gens shop. check our new products....
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div class="mx-auto">
+        <p><a href="{% url 'zanism:allproducts' %}">our dress collection</a></p>
+    </div>
+        </div>
+</div>
+{% endif %}
+
+<div class="mx_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" width="300px" height="300px">
+<!--    category. imge from the  model.py at class name is 'category' -->
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title ">{{ category.name }}</h1>
+    <p class="text-justify">{{ category.description }}</p>
+</div>
+    {% else %}
+<div>
+<img  class=" my_image_padding" alt="our products" src="{% static 'img/banner.png' %}">
+<!--    'my_image' if you want to add the size and shpe of the image add that {my_image} in the class -->
+</div>
+<br>
+<div>
+    <h1 class="text-cennter my_title">Our Dress Collections</h1>
+    <p class="text-justify">Clothing can insulate against cold or hot conditions, and it can provide a hygienic barrier, keeping infectious and toxic materials away from the body. It can protect feet from injury and discomfort or facilitate navigation in varied environments. Clothing also provides protection from ultraviolet radiation.</p>
+</div>
+{% endif %}
+
+<div class="container">
+    <div class="row max-auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4">
+            <div class="catd text-center" style="min-width:18rem;">
+                <a href="{{ product.get_url }}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="300px" height="300px"></a>
+           <div class="card-body">
+               <h3>{{ product.name }}</h3>
+               <h6>{{ product.price }}</h6>
+           </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-lightbtn_sm {% if products.number == pg %}active{% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+
+{% endblock %}
